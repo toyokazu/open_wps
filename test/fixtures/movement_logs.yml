@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  gps_location: 
+  manual_location: 
+  user: 
+  user_agent: MyString
+  user_device: MyString
+
+two:
+  gps_location: 
+  manual_location: 
+  user: 
+  user_agent: MyString
+  user_device: MyString

@@ -1,0 +1,98 @@
+<%= javascript_include_tag 'json2' %>
+<%= javascript_include_tag 'map' %>
+<script type="text/javascript">
+  <!--
+  // Global variables
+  var map;
+  var MAX_X = 800, MAX_Y = 640;
+
+  window.onload = function () {
+    var canvas = $('canvas');
+    var curr_x = $('curr_x'), curr_y = $('curr_y');
+    map = new Map('<%= @map.image.url %>',
+        canvas,
+        MAX_X,
+        MAX_Y,
+        0, 0,
+        curr_x, curr_y,
+        $('step_x'), $('step_y'));
+    map.draw();
+    // Draw guide lines for mouse position
+    canvas.observe('mousemove', map.drawWithLine.bind(map));
+    canvas.observe('mouseout', map.drawWithoutLine.bind(map));
+    // Update current position by mouse click
+    canvas.observe('click', map.setCurrentPosition.bind(map));
+
+    // Redraw current position when curr_x, curr_y values are updated
+    curr_x.observe('change', map.changeValueX.bind(map));
+    curr_y.observe('change', map.changeValueY.bind(map));
+
+    // Move current position to the specified direction by step value
+    $('up_button').observe('click', map.moveUp.bind(map));
+    $('left_button').observe('click', map.moveLeft.bind(map));
+    $('right_button').observe('click', map.moveRight.bind(map));
+    $('down_button').observe('click', map.moveDown.bind(map));
+    $('submit').observe('click', function() { $('time').value = new Date.now(); });
+  };
+-->
+</script>
+<canvas id="canvas" width="500" height="300"></canvas>
+<div id="form">
+  <table id="position_controller">
+    <tr>
+      <td></td>
+      <td><button id="up_button">Up</button></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><button id="left_button">Left</button></td>
+      <td></td>
+      <td><button id="right_button">Right</button></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><button id="down_button">Down</button></td>
+      <td></td>
+    </tr>
+  </table>
+  <%= form_tag(map_wifi_logs_path(@map), :remote => true) %>
+    <table id="step_params">
+      <tr>
+        <td>step_x:</td>
+        <td><%= text_field_tag('step_x', '1', :size => 5) %></td>
+        <td>step_y:</td>
+        <td><%= text_field_tag('step_y', '1', :size => 5) %></td>
+      </tr>
+    </table>
+    <table id="position_params">
+      <tr>
+        <td>curr_x:</td>
+        <td><%= text_field_tag('curr_x', nil, :size => 5) %></td>
+        <td>curr_y:</td>
+        <td><%= text_field_tag('curr_y', nil, :size => 5) %></td>
+      </tr>
+      <tr>
+        <td>height:</td>
+        <td><%= text_field_tag('height', nil, :size => 5) %></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+    <table id="wifi_tower_params">
+      <tr>
+        <td>wifi_towers:</td>
+      </tr>
+      <tr>
+        <td><%= text_area_tag('wifi_towers', nil, :size => "20x3") %></td>
+      </tr>
+      <tr>
+        <td>gpsd_tpv:</td>
+      </tr>
+      <tr>
+        <td><%= text_area_tag('gpsd_tpv', nil, :size => "20x3") %></td>
+      </tr>
+    </table>
+    <%= hidden_field_tag('time') %>
+    <%= submit_tag('Save', :id => 'submit') %>
+  </form>
+</div>

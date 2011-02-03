@@ -1,0 +1,53 @@
+<%= form_for(@map, :html => { :multipart => true}) do |f| %>
+  <% if @map.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@map.errors.count, "error") %> prohibited this map from being saved:</h2>
+
+      <ul>
+      <% @map.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :o_lat %><br />
+    <%= f.text_field :o_lat %>
+  </div>
+  <div class="field">
+    <%= f.label :o_lon %><br />
+    <%= f.text_field :o_lon %>
+  </div>
+  <div class="field">
+    <%= f.label :o_alt %><br />
+    <%= f.text_field :o_alt %>
+  </div>
+  <div class="field">
+    <%= f.label :o_x %><br />
+    <%= f.text_field :o_x %>
+  </div>
+  <div class="field">
+    <%= f.label :o_y %><br />
+    <%= f.text_field :o_y %>
+  </div>
+  <div class="field">
+    <%= f.label :dist_pix_ratio %><br />
+    <%= f.text_field :dist_pix_ratio %>
+  </div>
+  <div class="field">
+    <%= f.label :image %><br />
+    <%= f.file_field :image %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

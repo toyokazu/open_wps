@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  o_lat: 1.5
+  o_lon: 1.5
+  o_alt: 1.5
+  o_x: 1
+  o_y: 1
+  img_path: MyString
+  img_size: MyString
+  mp_ratio: 1.5
+
+two:
+  o_lat: 1.5
+  o_lon: 1.5
+  o_alt: 1.5
+  o_x: 1
+  o_y: 1
+  img_path: MyString
+  img_size: MyString
+  mp_ratio: 1.5

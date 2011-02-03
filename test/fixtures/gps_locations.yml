@@ -1,0 +1,35 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  gpsd_class: MyString
+  tag: MyString
+  device: MyString
+  time: 1.5
+  lat: 1.5
+  lon: 1.5
+  alt: 1.5
+  epx: 1.5
+  epy: 1.5
+  epv: 1.5
+  ept: 1.5
+  track: 1.5
+  speed: 1.5
+  climb: 1.5
+  mode: 1
+
+two:
+  gpsd_class: MyString
+  tag: MyString
+  device: MyString
+  time: 1.5
+  lat: 1.5
+  lon: 1.5
+  alt: 1.5
+  epx: 1.5
+  epy: 1.5
+  epv: 1.5
+  ept: 1.5
+  track: 1.5
+  speed: 1.5
+  climb: 1.5
+  mode: 1

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  map: 
+  x: 1
+  y: 1
+  height: 1.5
+  u_x: 1.5
+  u_y: 1.5
+
+two:
+  map: 
+  x: 1
+  y: 1
+  height: 1.5
+  u_x: 1.5
+  u_y: 1.5

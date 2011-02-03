@@ -1,0 +1,2 @@
+class MovementLogsController < ApplicationController
+end

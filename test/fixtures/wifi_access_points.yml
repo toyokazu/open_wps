@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  essid: MyString
+  bssid: MyString
+
+two:
+  essid: MyString
+  bssid: MyString

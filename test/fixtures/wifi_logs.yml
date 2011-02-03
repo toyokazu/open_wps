@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  wifi_access_point: 
+  movement_log: 
+  rssi: 1
+
+two:
+  wifi_access_point: 
+  movement_log: 
+  rssi: 1

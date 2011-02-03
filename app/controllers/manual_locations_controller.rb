@@ -1,0 +1,2 @@
+class ManualLocationsController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class WifiAccessPointsController < ApplicationController
+end

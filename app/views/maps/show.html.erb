@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @map.name %>
+</p>
+
+<p>
+  <b>Origin latitude:</b>
+  <%= @map.o_lat %>
+</p>
+
+<p>
+  <b>Origin longitude:</b>
+  <%= @map.o_lon %>
+</p>
+
+<p>
+  <b>Origin altitude:</b>
+  <%= @map.o_alt %>
+</p>
+
+<p>
+  <b>Origin x (pixel):</b>
+  <%= @map.o_x %>
+</p>
+
+<p>
+  <b>Origin y (pixel):</b>
+  <%= @map.o_y %>
+</p>
+
+<p>
+  <b>Distance/Pixel ratio:</b>
+  <%= @map.dist_pix_ratio %>
+</p>
+
+<p>
+  <b>Image:</b>
+  <%= image_tag @map.image.url %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @map.description %>
+</p>
+
+<%= link_to 'Edit', edit_map_path(@map) %> |
+<%= link_to 'Back', maps_path %>
