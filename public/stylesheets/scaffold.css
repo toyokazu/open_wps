@@ -63,3 +63,7 @@ canvas#canvas {
 table#position_controller button {
   width: 50px;
 }
+
+div#message {
+  height: 18px;
+}

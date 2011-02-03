@@ -32,11 +32,22 @@
     $('left_button').observe('click', map.moveLeft.bind(map));
     $('right_button').observe('click', map.moveRight.bind(map));
     $('down_button').observe('click', map.moveDown.bind(map));
-    $('submit').observe('click', function() { $('time').value = new Date.now(); });
+    $('submit').observe('click', function(event) { $('time').value = new Date.now(); });
+    $('form').observe('ajax:success', function(event) {
+      message = $('message');
+      message.insert(event.memo.responseText);
+      message.style.color = "green";
+    });
+    $('form').observe('ajax:failure', function(event) {
+      message = $('message');
+      message.insert(event.memo.responseText);
+      message.style.color = "red";
+    });
   };
 -->
 </script>
 <canvas id="canvas" width="500" height="300"></canvas>
+<div id="message"></div>
 <div id="form">
   <table id="position_controller">
     <tr>
@@ -76,6 +87,10 @@
         <td><%= text_field_tag('height', nil, :size => 5) %></td>
         <td></td>
         <td></td>
+      </tr>
+      <tr>
+        <td colspan="2">user device:</td>
+        <td colspan="2"><%= text_field_tag('user_device', nil, :size => 15) %></td>
       </tr>
     </table>
     <table id="wifi_tower_params">
