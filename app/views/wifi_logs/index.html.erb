@@ -1,0 +1,31 @@
+<h1>Recorded logs</h1>
+
+<%= javascript_include_tag 'json2' %>
+<%= javascript_include_tag 'map' %>
+<script type="text/javascript">
+  <!--
+  // Global variables
+  var map;
+  var MAX_X = 800, MAX_Y = 640;
+
+  window.onload = function () {
+    var canvas = $('canvas');
+    map = new Map('<%= @map.image.url %>',
+        canvas,
+        MAX_X,
+        MAX_Y,
+        0, 0,
+        0, 0,
+        0, 0);
+    map.drawStatic(function() {
+    <%- @wifi_logs.each do |wifi_log| -%>
+      map.drawWifiLog(<%= wifi_log.movement_log.manual_location.x %>,
+        <%= wifi_log.movement_log.manual_location.y %>,
+        <%= wifi_log.signal %>);
+    <%- end -%>
+    });
+  };
+-->
+</script>
+<canvas id="canvas" width="500" height="300"></canvas>
+<%= link_to 'Back', maps_path %>
