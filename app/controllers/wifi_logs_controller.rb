@@ -15,15 +15,20 @@ class WifiLogsController < ApplicationController
     end
     @manual_locations = ManualLocation.where(:map_id => @map.id)
     @wifi_logs = []
+    @wifi_access_points = []
     @manual_locations.each do |l|
       if !l.movement_log.nil?
         if @wifi_access_point.nil?
           @wifi_logs = @wifi_logs + l.movement_log.wifi_logs
+          l.movement_log.wifi_logs.each do |wifi_log|
+            @wifi_access_points << wifi_log.wifi_access_point
+          end
         else
           @wifi_logs = @wifi_logs + l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id)
         end
       end
     end
+    @wifi_access_points = @wifi_access_points.uniq
 
     respond_to do |format|
       format.html # index.html.erb

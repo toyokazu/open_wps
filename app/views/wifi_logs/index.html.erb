@@ -28,4 +28,9 @@
 -->
 </script>
 <canvas id="canvas" width="500" height="300"></canvas>
+<div id="wifi_access_points">
+<%- @wifi_access_points.each do |wifi_ap| -%>
+  <%= link_to("#{wifi_ap.ssid} (#{wifi_ap.mac})", url_for(:controller => "wifi_logs", :action => "index", :map_id => @map.id, :wifi_access_point_id => wifi_ap.id)) %><br/>
+<%- end -%>
 <%= link_to 'Back', maps_path %>
+</div>
