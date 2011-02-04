@@ -1,3 +1,5 @@
+<h1>Register logs</h1>
+
 <%= javascript_include_tag 'json2' %>
 <%= javascript_include_tag 'map' %>
 <script type="text/javascript">
@@ -107,7 +109,12 @@
         <td><%= text_area_tag('gpsd_tpv', nil, :size => "20x3") %></td>
       </tr>
     </table>
+    <table id="buttons">
+      <tr>
+        <td><%= submit_tag('Save', :id => 'submit') %></td>
+        <td><%= link_to('Back', maps_path) %></td>
+      </tr>
+    </table>
     <%= hidden_field_tag('time') %>
-    <%= submit_tag('Save', :id => 'submit') %>
   </form>
 </div>

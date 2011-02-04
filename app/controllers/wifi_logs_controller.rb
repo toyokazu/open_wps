@@ -1,10 +1,36 @@
 class WifiLogsController < ApplicationController
   before_filter :authenticate_user!
+  # GET /maps/1/wifi_logs/
+  # GET /maps/1/wifi_access_points/1/wifi_logs/
+  def index
+    if !params[:map_id].nil?
+      @map = Map.find(params[:map_id])
+    else
+      #FIXME
+    end
+    if !params[:wifi_access_point_id].nil?
+      @wifi_access_point = WifiAccessPoint.find(params[:wifi_access_point_id])
+    else
+      #FIXME
+    end
+    @manual_locations = ManualLocation.where(:map_id => @map.id)
+    @wifi_logs = []
+    @manual_locations.each do |l|
+      if !l.movement_log.nil?
+        if @wifi_access_point.nil?
+          @wifi_logs = @wifi_logs + l.movement_log.wifi_logs
+        else
+          @wifi_logs = @wifi_logs + l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id)
+        end
+      end
+    end
 
-  # GET /wifi_logs/new
-  # GET /wifi_logs/new.xml
+    respond_to do |format|
+      format.html # index.html.erb
+    end
+  end
+
   # GET /maps/1/wifi_logs/new
-  # GET /maps/1/wifi_logs/new.xml
   def new
     @wifi_log = WifiLog.new
     if !params[:map_id].nil?
@@ -17,7 +43,6 @@ class WifiLogsController < ApplicationController
     end
   end
 
-  # POST /maps/1/wifi_logs
   # POST /maps/1/wifi_logs
   def create
     begin

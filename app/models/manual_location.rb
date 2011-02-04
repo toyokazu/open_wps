@@ -1,5 +1,6 @@
 class ManualLocation < ActiveRecord::Base
   belongs_to :map
+  has_one :movement_log
 
   def init_by_params(params)
     self.map_id = params["map_id"].to_i

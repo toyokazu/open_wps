@@ -14,6 +14,7 @@ function Map(image_path, elem_canvas, max_x, max_y, curr_x, curr_y, elem_curr_x,
   this.elem_step_y = elem_step_y;
   this.elem_canvas.width = this.max_x;
   this.elem_canvas.height = this.max_y;
+  this.ctx = this.elem_canvas.getContext('2d');
 };
 
 Map.prototype = {
@@ -24,48 +25,47 @@ Map.prototype = {
   },
 
   draw: function(x, y) {
-    var ctx = this.elem_canvas.getContext('2d');
-    // デフォルトの順番で表示 (destination が下)
-    // destination を上にする場合は以下のコメントをはずす
+    // display by default order (destination displayed as a lower layer)
+    // use comment outed line when you want destination as an upper layer destination
     //ctx.globalCompositeOperation = 'destination-over';
-    ctx.clearRect(0, 0, this.max_x, this.max_y); // canvas を消去
+    this.ctx.clearRect(0, 0, this.max_x, this.max_y); // clear canvas
 
-    ctx.fillStyle = 'rgba(0,0,0,0.4)';
-    // 半透明の青色
-    ctx.strokeStyle = 'rgba(0,153,255,0.4)';
-    ctx.save();
+    this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    // semitransparent blue
+    this.ctx.strokeStyle = 'rgba(0,153,255,0.4)';
+    this.ctx.save();
     //ctx.translate(150,150);
 
-    // 背景画像を表示
+    // display background image
     this.image.onload = function() {
-      ctx.drawImage(this.image, 0, 0);
+      this.ctx.drawImage(this.image, 0, 0);
       this.image_preloaded = true;
     }.bind(this);
-    // すでに this.image がロードされている場合
+    // if this.image is already loaded
     if (this.image_preloaded) {
-      ctx.drawImage(this.image, 0, 0);
+      this.ctx.drawImage(this.image, 0, 0);
     }
-    // 現在位置を表示
+    // display current position
     if (!Object.isUndefined(this.curr_x) && !Object.isUndefined(this.curr_y)) {
-      // 赤色
-      ctx.strokeStyle = 'rgba(255,0,0,1)';
-      ctx.beginPath();
-      ctx.arc(this.curr_x, this.curr_y, 1, 0, Math.PI*2, false);
-      ctx.closePath();
-      ctx.stroke();
+      // red
+      this.ctx.strokeStyle = 'rgba(255,0,0,1)';
+      this.ctx.beginPath();
+      this.ctx.arc(this.curr_x, this.curr_y, 1, 0, Math.PI*2, false);
+      this.ctx.closePath();
+      this.ctx.stroke();
       this.updateCurrentPositionElements();
     }
-    // 補助線を表示
+    // display assist line
     if (!Object.isUndefined(x) && !Object.isUndefined(y)) {
-      ctx.restore();
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, this.max_y);
-      ctx.moveTo(0, y);
-      ctx.lineTo(this.max_x, y);
-      ctx.closePath();
-      ctx.stroke();
+      this.ctx.restore();
+      this.ctx.lineWidth = 1;
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, 0);
+      this.ctx.lineTo(x, this.max_y);
+      this.ctx.moveTo(0, y);
+      this.ctx.lineTo(this.max_x, y);
+      this.ctx.closePath();
+      this.ctx.stroke();
     }
   },
 
@@ -76,6 +76,42 @@ Map.prototype = {
 
   drawWithoutLine: function(e) {
     this.draw();
+  },
+
+  drawStatic: function(additionalDraw) {
+    this.image.onload = function() {
+      this.ctx.drawImage(this.image, 0, 0);
+      this.image_preloaded = true;
+      additionalDraw();
+    }.bind(this);
+  },
+
+  drawWifiLog: function(x, y, rssi) {
+    //this.ctx.strokeStyle = 'rgba(0,255,0,1)';
+    this.ctx.strokeStyle = this.wifiLogColor(rssi);
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, 1, 0, Math.PI*2, false);
+    this.ctx.closePath();
+    this.ctx.stroke();
+  },
+
+  wifiLogColor: function(rssi) {
+    var red = 0, green = 0, blue = 0;
+    var x = 100 + rssi;
+    var rgb = '';
+
+    if (x >= 0 && x <= 32) {
+      blue = Math.floor(-8 * x + 256);
+      green = Math.floor(8 * x);
+      red = 0;
+    } else {
+      red = 0;
+      green = Math.floor(-8 * x + 512);
+      blue = Math.floor(8 * x - 256);
+    }
+    rgb = 'rgba(' + red + ',' + green + ',' + blue + ',1)';
+    //alert(rgb);
+    return rgb;
   },
 
   //

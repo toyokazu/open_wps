@@ -4,6 +4,9 @@ WpsLogger::Application.routes.draw do
   resources :maps
 
   resources :maps do
+    resources :wifi_access_points do
+      resources :wifi_logs
+    end
     resources :wifi_logs
   end
 
