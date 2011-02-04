@@ -10,7 +10,7 @@
 
   window.onload = function () {
     var canvas = $('canvas');
-    map = new Map('<%= @map.image.url %>',
+    map = new Map('<%= compute_public_path(@map.image.url, '') %>',
         canvas,
         MAX_X,
         MAX_Y,
