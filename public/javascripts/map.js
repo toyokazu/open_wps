@@ -102,16 +102,28 @@ Map.prototype = {
 
     if (x >= 0 && x <= 32) {
       blue = Math.floor(-8 * x + 256);
-      green = Math.floor(8 * x);
-      red = 0;
+      green = 0;
+      //green = Math.floor(8 * x);
+      red = Math.floor(8 * x);
+      //red = 0;
     } else {
-      red = 0;
-      green = Math.floor(-8 * x + 512);
+      red = Math.floor(-8 * x + 512);
+      //red = 0;
+      green = 0;
+      //green = Math.floor(-8 * x + 512);
       blue = Math.floor(8 * x - 256);
     }
     rgb = 'rgba(' + red + ',' + green + ',' + blue + ',1)';
     //alert(rgb);
     return rgb;
+  },
+
+  drawWifiAccessPoint: function(x, y) {
+    this.ctx.strokeStyle = 'rgba(0,255,0,1)';
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, 1, 0, Math.PI*2, false);
+    this.ctx.closePath();
+    this.ctx.stroke();
   },
 
   //

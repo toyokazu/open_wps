@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110202093107) do
+ActiveRecord::Schema.define(:version => 20110310000001) do
 
   create_table "gps_locations", :force => true do |t|
     t.string   "gpsd_class"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(:version => 20110202093107) do
     t.datetime "updated_at"
   end
 
+  create_table "map_relations", :force => true do |t|
+    t.integer  "basis_map_id"
+    t.integer  "relative_map_id"
+    t.float    "alt_diff"
+    t.float    "brng_diff"
+    t.integer  "ref_x"
+    t.integer  "ref_y"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "maps", :force => true do |t|
     t.string   "name"
     t.float    "o_lat"
@@ -59,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20110202093107) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.float    "brng"
   end
 
   create_table "movement_logs", :force => true do |t|
@@ -96,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20110202093107) do
     t.string   "mac"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "manual_location_id"
   end
 
   create_table "wifi_logs", :force => true do |t|

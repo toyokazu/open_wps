@@ -1,11 +1,12 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.5'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'pg'
+#gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'devise'
 
 # Use unicorn as the web server
@@ -33,5 +34,6 @@ gem 'devise'
 
 gem "paperclip", "~> 2.3"
 gem "json"
-#gem "rmagick"
-
+gem "gsl"
+gem "spatial_adapter"
+#gem "GeoRuby"

@@ -1,5 +1,6 @@
 class WifiAccessPoint < ActiveRecord::Base
   has_many :wifi_logs
+  belongs_to :manual_location
 
   class << self
     def find_or_initialize_by_json(json)

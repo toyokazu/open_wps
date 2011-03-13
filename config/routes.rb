@@ -8,6 +8,7 @@ WpsLogger::Application.routes.draw do
       resources :wifi_logs
     end
     resources :wifi_logs
+    resources :maps
   end
 
   resources :manual_locations

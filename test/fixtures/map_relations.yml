@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  basis: 
+  relative: 
+  alt_diff: 1.5
+
+two:
+  basis: 
+  relative: 
+  alt_diff: 1.5

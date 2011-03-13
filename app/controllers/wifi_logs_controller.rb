@@ -13,7 +13,20 @@ class WifiLogsController < ApplicationController
     else
       #FIXME
     end
-    @manual_locations = ManualLocation.where(:map_id => @map.id)
+    # after=2005-08-09T10:57:00-08:00 (RFC 3339 format)
+    # manual_location.time is recorded as integer value of the timestamp (micro second)
+    if params[:after].nil?
+      after_param = Time.new(1970,01,01).to_i * 1000
+    else
+      after_param = Time.zone.parse(params[:after]).to_i * 1000
+    end
+    # before=2005-08-09T10:57:00-08:00 (RFC 3339 format)
+    if params[:before].nil?
+      before_param = Time.new(2031,01,01).to_i * 1000
+    else
+      before_param = Time.zone.parse(params[:before]).to_i * 1000
+    end
+    @manual_locations = ManualLocation.where(:map_id => @map.id).where(:time => after_param..before_param)
     @wifi_logs = []
     @wifi_access_points = []
     @manual_locations.each do |l|

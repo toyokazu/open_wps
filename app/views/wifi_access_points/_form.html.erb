@@ -1,0 +1,90 @@
+<%= javascript_include_tag 'json2' %>
+<%= javascript_include_tag 'map' %>
+<%- if !@wifi_access_point.manual_location.nil? -%>
+  <%- ml = @wifi_access_point.manual_location -%>
+<script type="text/javascript">
+  <!--
+  // Global variables
+  var map;
+  var MAX_X = 800, MAX_Y = 640;
+
+  window.onload = function () {
+    var canvas = $('canvas');
+    var curr_x = $('manual_location_x'), curr_y = $('manual_location_y');
+    map = new Map('<%= compute_public_path(ml.map.image.url, '') %>',
+        canvas,
+        MAX_X,
+        MAX_Y,
+        <%= ml.x.nil? ? 0 : ml.x %>, <%= ml.y.nil? ? 0 : ml.y %>,
+        curr_x, curr_y);
+    map.draw();
+    // Draw guide lines for mouse position
+    canvas.observe('mousemove', map.drawWithLine.bind(map));
+    canvas.observe('mouseout', map.drawWithoutLine.bind(map));
+    // Update current position by mouse click
+    canvas.observe('click', map.setCurrentPosition.bind(map));
+
+    // Redraw current position when curr_x, curr_y values are updated
+    curr_x.observe('change', map.changeValueX.bind(map));
+    curr_y.observe('change', map.changeValueY.bind(map));
+  };
+-->
+</script>
+<canvas id="canvas" width="500" height="300"></canvas>
+<%- end -%>
+<div id="message"></div>
+<div id="form">
+<%= form_for(@wifi_access_point, :html => { :multipart => true}) do |f| %>
+  <% if @wifi_access_point.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@wifi_access_point.errors.count, "error") %> prohibited this map from being saved:</h2>
+
+      <ul>
+      <% @wifi_access_point.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :ssid %><br />
+    <%= f.text_field :ssid %>
+  </div>
+  <div class="field">
+    <%= f.label :mac %><br />
+    <%= f.text_field :mac %>
+  </div>
+  <%- ml = @wifi_access_point.manual_location -%>
+  <div class="field">
+    <table id="position_params">
+      <tr>
+        <td>x:</td>
+        <td><%= text_field_tag('manual_location[x]', ml.nil? ? nil : ml.x, :size => 5) %></td>
+        <td>y:</td>
+        <td><%= text_field_tag('manual_location[y]', ml.nil? ? nil : ml.y, :size => 5) %></td>
+      </tr>
+      <tr>
+        <td>height:</td>
+        <td><%= text_field_tag('manual_location[height]', ml.nil? ? nil : ml.height, :size => 5) %></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+    <table id="step_params">
+      <tr>
+        <td>step_x:</td>
+        <td><%= text_field_tag('manual_location[u_x]', '0', :size => 5) %></td>
+        <td>step_y:</td>
+        <td><%= text_field_tag('manual_location[u_y]', '0', :size => 5) %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="field">
+    <%= select('manual_location', 'map_id', Map.all.collect {|p| [p.name, p.id]}, {:include_blank => 'None'}) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+</div>

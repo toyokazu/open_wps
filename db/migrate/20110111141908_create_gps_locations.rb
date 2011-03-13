@@ -8,6 +8,7 @@ class CreateGpsLocations < ActiveRecord::Migration
       t.float :lat
       t.float :lon
       t.float :alt
+      t.geometry :geom, :z => true
       t.float :epx
       t.float :epy
       t.float :epv

@@ -31,6 +31,11 @@
 </p>
 
 <p>
+  <b>Bearing (rad):</b>
+  <%= @map.brng %>
+</p>
+
+<p>
   <b>Distance/Pixel ratio:</b>
   <%= @map.dist_pix_ratio %>
 </p>
@@ -43,6 +48,15 @@
 <p>
   <b>Description:</b>
   <%= @map.description %>
+</p>
+
+<p>
+  <b>Basis map:</b>
+  <%- if @map.basis_map.nil? -%>
+    'Use absolute position'
+  <%- else -%>
+    <%= @map.basis_map.name %>, <%= @map.basis_map_relation.alt_diff %>m, (<%= @map.basis_map_relation.ref_x %>, <%= @map.basis_map_relation.ref_y %>)
+  <%- end -%>
 </p>
 
 <%= link_to 'Edit', edit_map_path(@map) %> |

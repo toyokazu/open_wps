@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>SSID:</b>
+  <%= @wifi_access_point.ssid %>
+</p>
+
+<p>
+  <b>MAC Address:</b>
+  <%= @wifi_access_point.mac %>
+</p>
+
+<%- if !@wifi_access_point.manual_location.nil? -%>
+  <%- ml = @wifi_access_point.manual_location -%>
+<p>
+  <b>Map:</b>
+  <%= ml.map.nil? ? '' : ml.map.name %>
+</p>
+
+<p>
+  <b>x:</b>
+  <%= ml.x %>
+</p>
+
+<p>
+  <b>y:</b>
+  <%= ml.y %>
+</p>
+
+<p>
+  <b>height:</b>
+  <%= ml.height %>
+</p>
+<%- end -%>
+
+<%= link_to 'Edit', edit_wifi_access_point_path(@wifi_access_point) %> |
+<%= link_to 'Back', wifi_access_points_path %>
