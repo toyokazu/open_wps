@@ -1,9 +1,45 @@
 <h1>Listing WifiAccessPoint</h1>
 
+<%- if !@map.nil? -%>
+<%= javascript_include_tag 'json2' %>
+<%= javascript_include_tag 'map' %>
+<script type="text/javascript">
+  <!--
+  // Global variables
+  var map;
+  var MAX_X = 800, MAX_Y = 640;
+
+  window.onload = function () {
+    var canvas = $('canvas');
+    map = new Map('<%= compute_public_path(@map.image.url, '') %>',
+        canvas,
+        MAX_X,
+        MAX_Y,
+        0, 0,
+        0, 0,
+        0, 0);
+    map.drawStatic(function() {
+    <%- @wifi_access_points.each do |wifi_access_point| -%>
+      map.drawWifiAccessPoint(<%= wifi_access_point.manual_location.x %>,
+        <%= wifi_access_point.manual_location.y %>);
+    <%- end -%>
+    });
+  };
+-->
+</script>
+<canvas id="canvas" width="500" height="300"></canvas>
+<%- end -%>
+
+<div id="wifi_access_points">
 <table>
   <tr>
     <th>SSID</th>
     <th>MAC Address</th>
+    <th>Map</th>
+    <%- if !@map.nil? -%>
+    <th colspan="3">Location</th>
+    <th>Log</th>
+    <%- end -%>
     <th colspan="3">Operation</th>
   </tr>
 
@@ -11,13 +47,29 @@
   <tr>
     <td><%= wifi_access_point.ssid %></td>
     <td><%= wifi_access_point.mac %></td>
+    <td><%= wifi_access_point.manual_location.nil? ? '' : link_to(wifi_access_point.manual_location.map.name, map_wifi_access_points_path(:map_id => wifi_access_point.manual_location.map_id)) %></td>
+    <%- if !@map.nil? -%>
+    <%-   if !wifi_access_point.manual_location.nil? -%>
+    <td><%= wifi_access_point.manual_location.x %></td>
+    <td><%= wifi_access_point.manual_location.y %></td>
+    <td><%= wifi_access_point.manual_location.height %></td>
+    <%-   else -%>
+    <td></td>
+    <td></td>
+    <td></td>
+    <%-   end -%>
+    <td><%= link_to 'Show', map_wifi_access_point_wifi_logs_path(:map_id => @map.id, :wifi_access_point_id => wifi_access_point.id) %></td>
+    <%- end -%>
     <td><%= link_to 'Show', wifi_access_point %></td>
     <td><%= link_to 'Edit', edit_wifi_access_point_path(wifi_access_point) %></td>
     <td><%= link_to 'Destroy', wifi_access_point, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
+</div>
 
 <br />
 
+<div id="back_link">
 <%= link_to 'New WifiAccessPoint', new_wifi_access_point_path %>
+</div>

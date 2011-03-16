@@ -28,9 +28,38 @@
 -->
 </script>
 <canvas id="canvas" width="500" height="300"></canvas>
+<%- if !@map.nil? && !@wifi_access_point.nil? -%>
+<div id="wifi_logs">
+<table>
+  <tr>
+    <th>WifiAccessPoint</th>
+    <th colspan="2">Devise</th>
+    <th colspan="4">Location</th>
+    <th>Signal</th>
+    <th colspan="2">Operation</th>
+  </tr>
+<%- @wifi_logs.each do |wifi_log| -%>
+  <tr>
+    <td><%= wifi_log.wifi_access_point.mac %></td>
+    <td><%= wifi_log.movement_log.user.email %></td>
+    <td><%= wifi_log.movement_log.user_agent %></td>
+    <td><%= wifi_log.movement_log.manual_location.x %></td>
+    <td><%= wifi_log.movement_log.manual_location.y %></td>
+    <td><%= wifi_log.movement_log.manual_location.height %></td>
+    <td><%= Time.at(wifi_log.movement_log.manual_location.time/1000) %></td>
+    <td><%= wifi_log.signal %></td>
+    <td><%= link_to 'Show', map_wifi_access_point_wifi_log_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :id => wifi_log.id) %></td>
+    <td><%= link_to 'Destroy', map_wifi_access_point_wifi_log_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :id => wifi_log.id), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<%- end -%>
+</table>
+</div>
+<%- end -%>
 <div id="wifi_access_points">
 <%- @wifi_access_points.each do |wifi_ap| -%>
   <%= link_to("#{wifi_ap.ssid} (#{wifi_ap.mac})", url_for(:controller => "wifi_logs", :action => "index", :map_id => @map.id, :wifi_access_point_id => wifi_ap.id, :before => params[:before], :after => params[:after])) %><br/>
 <%- end -%>
+</div>
+<div id="back_link">
 <%= link_to 'Back', maps_path %>
 </div>

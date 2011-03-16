@@ -48,6 +48,23 @@ class WifiLogsController < ApplicationController
     end
   end
 
+  # GET /wifi_access_points/1
+  # GET /maps/1//wifi_access_points/1/wifi_logs/1
+  def show
+    if !params[:map_id].nil?
+      @map = Map.find(params[:map_id])
+    end
+    if !params[:wifi_access_point_id].nil?
+      @wifi_access_point = WifiAccessPoint.find(params[:wifi_access_point_id])
+    end
+    @wifi_log = WifiLog.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @wifi_log }
+    end
+  end
+
   # GET /maps/1/wifi_logs/new
   def new
     @wifi_log = WifiLog.new
@@ -113,4 +130,21 @@ class WifiLogsController < ApplicationController
     end
   end
 
+  # DELETE /wifi_logs/1
+  # DELETE /maps/1/wifi_access_point/1/wifi_logs/1
+  def destroy
+    @wifi_log = WifiLog.find(params[:id])
+    @wifi_log.destroy
+
+    respond_to do |format|
+      format.html do
+        if !params[:map_id].nil? && !params[:wifi_access_point_id].nil?
+          redirect_to(map_wifi_access_point_wifi_logs_url(:map_id => params[:map_id], :wifi_access_point_id => params[:wifi_access_point_id]))
+        else
+          redirect_to(wifi_logs_url)
+        end
+      end
+      format.xml  { head :ok }
+    end
+  end
 end

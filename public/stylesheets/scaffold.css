@@ -48,7 +48,6 @@ a:hover {
   clear: both;
 }
 
-
 #header, #about, #getting-started {
   padding-left: 75px;
   padding-right: 30px;
@@ -210,4 +209,18 @@ table#position_controller button {
 
 div#message {
   height: 18px;
+}
+
+/* wifi_logs/index */
+/* wifi_access_points/index */
+div#wifi_logs {
+  float: left;
+}
+
+div#wifi_access_points {
+  float: left;
+}
+
+div#back_link {
+  clear: both;
 }

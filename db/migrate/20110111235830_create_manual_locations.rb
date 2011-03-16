@@ -7,7 +7,7 @@ class CreateManualLocations < ActiveRecord::Migration
       t.float :height
       t.float :u_x
       t.float :u_y
-      t.integer :time
+      t.integer :time, :limit => 8
       t.geometry :geom, :z => true
 
       t.timestamps

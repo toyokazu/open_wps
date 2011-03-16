@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.integer  "mode"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.geometry "geom",       :limit => nil
   end
 
   create_table "manual_locations", :force => true do |t|
@@ -39,9 +40,10 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.float    "height"
     t.float    "u_x"
     t.float    "u_y"
-    t.integer  "time"
+    t.integer  "time",       :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.geometry "geom",       :limit => nil
   end
 
   create_table "map_relations", :force => true do |t|
@@ -66,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.geometry "geom",               :limit => nil
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"

@@ -8,9 +8,9 @@ class WifiAccessPointsController < ApplicationController
       @map = Map.find(params["map_id"])
     end
     if @map.nil?
-      @wifi_access_points = WifiAccessPoint.all
+      @wifi_access_points = WifiAccessPoint.order("mac").all
     else
-      @wifi_access_points = WifiAccessPoint.where('manual_locations.map_id = ?', params["map_id"]).all(:include => [:manual_location])
+      @wifi_access_points = WifiAccessPoint.where('manual_locations.map_id = ?', params["map_id"]).order("mac").all(:include => [:manual_location])
     end
 
     respond_to do |format|
@@ -82,9 +82,18 @@ class WifiAccessPointsController < ApplicationController
     end
 
     respond_to do |format|
-      if @wifi_access_point.save && @manual_location.save
-        format.html { redirect_to(@wifi_access_point, :notice => 'WifiAccessPoint was successfully updated.') }
-        format.xml  { head :ok }
+      if @wifi_access_point.save
+        #FIXME
+        if @manual_location.nil?
+          format.html { redirect_to(@wifi_access_point, :notice => 'WifiAccessPoint was successfully updated.') }
+          format.xml  { head :ok }
+        elsif @manual_location.save
+          format.html { redirect_to(@wifi_access_point, :notice => 'WifiAccessPoint was successfully updated.') }
+          format.xml  { head :ok }
+        else
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @wifi_access_point.errors, :status => :unprocessable_entity }
+        end
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @wifi_access_point.errors, :status => :unprocessable_entity }

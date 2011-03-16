@@ -5,6 +5,7 @@ class CreateMaps < ActiveRecord::Migration
       t.float :o_lat
       t.float :o_lon
       t.float :o_alt
+      t.geometry :geom, :z => true
       t.integer :o_x
       t.integer :o_y
       t.float :dist_pix_ratio
