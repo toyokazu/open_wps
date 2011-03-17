@@ -118,8 +118,18 @@ Map.prototype = {
     return rgb;
   },
 
+  //
   drawWifiAccessPoint: function(x, y) {
     this.ctx.strokeStyle = 'rgba(0,255,0,1)';
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, 1, 0, Math.PI*2, false);
+    this.ctx.closePath();
+    this.ctx.stroke();
+  },
+
+  //
+  drawMovementLog: function(x, y) {
+    this.ctx.strokeStyle = 'rgba(0,0,255,1)';
     this.ctx.beginPath();
     this.ctx.arc(x, y, 1, 0, Math.PI*2, false);
     this.ctx.closePath();

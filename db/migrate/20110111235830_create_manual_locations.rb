@@ -8,10 +8,11 @@ class CreateManualLocations < ActiveRecord::Migration
       t.float :u_x
       t.float :u_y
       t.integer :time, :limit => 8
-      t.geometry :geom, :z => true
+      t.point :geom, :with_z => true, :srid => Coordinate::SRID
 
       t.timestamps
     end
+    add_index :manual_locations, :geom, :spatial=>true
   end
 
   def self.down

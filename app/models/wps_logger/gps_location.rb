@@ -1,5 +1,5 @@
-class GpsLocation < ActiveRecord::Base
-  include Coordinate
+class WpsLogger::GpsLocation < WpsLogger::Base
+  set_table_name :gps_locations
 
   has_one :movement_log
   class << self

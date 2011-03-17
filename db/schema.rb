@@ -30,8 +30,10 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.integer  "mode"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "geom",       :limit => nil
+    t.point    "geom",       :limit => nil, :srid => 4612, :with_z => true
   end
+
+  add_index "gps_locations", ["geom"], :name => "index_gps_locations_on_geom", :spatial => true
 
   create_table "manual_locations", :force => true do |t|
     t.integer  "map_id"
@@ -43,8 +45,10 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.integer  "time",       :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "geom",       :limit => nil
+    t.point    "geom",       :limit => nil, :srid => 4612, :with_z => true
   end
+
+  add_index "manual_locations", ["geom"], :name => "index_manual_locations_on_geom", :spatial => true
 
   create_table "map_relations", :force => true do |t|
     t.integer  "basis_map_id"
@@ -68,13 +72,15 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.geometry "geom",               :limit => nil
+    t.point    "geom",               :limit => nil, :srid => 4612, :with_z => true
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.float    "brng"
   end
+
+  add_index "maps", ["geom"], :name => "index_maps_on_geom", :spatial => true
 
   create_table "movement_logs", :force => true do |t|
     t.integer  "gps_location_id"

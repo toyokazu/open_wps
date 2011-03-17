@@ -8,7 +8,7 @@ class CreateGpsLocations < ActiveRecord::Migration
       t.float :lat
       t.float :lon
       t.float :alt
-      t.geometry :geom, :z => true
+      t.point :geom, :with_z => true, :srid => Coordinate::SRID
       t.float :epx
       t.float :epy
       t.float :epv
@@ -20,6 +20,7 @@ class CreateGpsLocations < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :gps_locations, :geom, :spatial=>true
   end
 
   def self.down

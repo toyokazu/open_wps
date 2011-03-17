@@ -7,6 +7,10 @@ WpsLogger::Application.routes.draw do
     resources :wifi_access_points do
       resources :wifi_logs
     end
+    resources :movement_logs do
+      get 'index'
+      resources :wifi_logs
+    end
     resources :wifi_logs
     resources :maps
   end
@@ -14,8 +18,6 @@ WpsLogger::Application.routes.draw do
   resources :manual_locations
 
   resources :gps_locations
-
-  resources :movement_logs
 
   resources :wifi_access_points
 

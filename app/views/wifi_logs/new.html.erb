@@ -37,12 +37,14 @@
     $('submit').observe('click', function(event) { $('time').value = new Date.now(); });
     $('form').observe('ajax:success', function(event) {
       message = $('message');
-      message.insert(event.memo.responseText);
+      message.update(event.memo.responseText + '<br/>at ' + new Date().toLocaleString());
+      //message.insert(event.memo.responseText);
       message.style.color = "green";
     });
     $('form').observe('ajax:failure', function(event) {
       message = $('message');
-      message.insert(event.memo.responseText);
+      message.update(event.memo.responseText + '<br/>at ' + new Date().toLocaleString());
+      //message.insert(event.memo.responseText);
       message.style.color = "red";
     });
   };

@@ -1,0 +1,69 @@
+<h1>Recorded log</h1>
+
+<%- if !@map.nil? -%>
+<%= javascript_include_tag 'json2' %>
+<%= javascript_include_tag 'map' %>
+<script type="text/javascript">
+  <!--
+  // Global variables
+  var map;
+  var MAX_X = 800, MAX_Y = 640;
+
+  window.onload = function () {
+    var canvas = $('canvas');
+    map = new Map('<%= compute_public_path(@map.image.url, '') %>',
+        canvas,
+        MAX_X,
+        MAX_Y,
+        0, 0,
+        0, 0,
+        0, 0);
+    map.drawStatic(function() {
+    map.drawWifiLog(<%= @wifi_log.movement_log.manual_location.x %>,
+    <%= @wifi_log.movement_log.manual_location.y %>,
+    <%= @wifi_log.signal %>);
+    });
+  };
+-->
+</script>
+<canvas id="canvas" width="500" height="300"></canvas>
+<%- end -%>
+<%- if !@map.nil? && (!@wifi_access_point.nil? || !@movement_log.nil?) -%>
+<div id="wifi_logs">
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>WifiAccessPoint:</b>
+  <%= @wifi_log.wifi_access_point.mac %>
+</p>
+
+<p>
+  <b>Devise:</b><br />
+  user: <%= @wifi_log.movement_log.user.email %><br />
+  user_agent: <%= @wifi_log.movement_log.user_agent %><br />
+<p>
+
+<p>
+  <b>Location:</b><br />
+  x: <%= @wifi_log.movement_log.manual_location.x %><br />
+  y: <%= @wifi_log.movement_log.manual_location.y %><br />
+  height: <%= @wifi_log.movement_log.manual_location.height %><br />
+  time: <%= Time.at(@wifi_log.movement_log.manual_location.time/1000) %><br />
+<p>
+
+<p>
+  <b>Signal:</b>
+  <%= @wifi_log.signal %>
+</p>
+</div>
+<%- end -%>
+
+<div class="clear">
+<%- if @map.nil? -%>
+<%= link_to 'Back', maps_path %>
+<%- elsif !@map.nil? && !@wifi_access_point.nil? -%>
+<%= link_to 'Back', map_wifi_access_point_wifi_logs_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id) %>
+<%- elsif !@map.nil? && !@movement_log.nil? %>
+<%= link_to 'Back', map_movement_log_wifi_logs_path(:map_id => @map.id, :movement_log_id => @movement_log.id) %>
+<%- end -%>
+</div>

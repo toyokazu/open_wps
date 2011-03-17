@@ -1,0 +1,60 @@
+<h1>Listing MovementLog</h1>
+
+<%- if !@map.nil? -%>
+<%= javascript_include_tag 'json2' %>
+<%= javascript_include_tag 'map' %>
+<script type="text/javascript">
+  <!--
+  // Global variables
+  var map;
+  var MAX_X = 800, MAX_Y = 640;
+
+  window.onload = function () {
+    var canvas = $('canvas');
+    map = new Map('<%= compute_public_path(@map.image.url, '') %>',
+        canvas,
+        MAX_X,
+        MAX_Y,
+        0, 0,
+        0, 0,
+        0, 0);
+    map.drawStatic(function() {
+    <%- @movement_logs.each do |movement_log| -%>
+      map.drawMovementLog(<%= movement_log.manual_location.x %>,
+        <%= movement_log.manual_location.y %>);
+    <%- end -%>
+    });
+  };
+-->
+</script>
+<canvas id="canvas" width="500" height="300"></canvas>
+<%- end -%>
+
+<div id="movement_logs">
+<table>
+  <tr>
+    <th colspan="2">Devise</th>
+    <th colspan="4">Location</th>
+    <th colspan="2">Operation</th>
+  </tr>
+
+<% @movement_logs.each do |movement_log| %>
+  <tr>
+    <td><%= movement_log.user.email %></td>
+    <td><%= movement_log.user_agent %></td>
+    <td><%= movement_log.manual_location.x %></td>
+    <td><%= movement_log.manual_location.y %></td>
+    <td><%= movement_log.manual_location.height %></td>
+    <td><%= Time.at(movement_log.manual_location.time/1000) %></td>
+    <td><%= link_to 'Show', map_movement_log_wifi_logs_path(:map_id => @map.id, :movement_log_id => movement_log.id) %></td>
+    <td><%= link_to 'Destroy', map_movement_log_path(:map_id => @map.id, :id => movement_log.id), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+</div>
+
+<br />
+
+<div class="clear">
+<%= link_to 'Back', maps_path %>
+</div>

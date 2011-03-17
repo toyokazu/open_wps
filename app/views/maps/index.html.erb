@@ -5,6 +5,8 @@
     <th>Name</th>
     <th>Image</th>
     <th colspan="2">Log</th>
+    <th>WifiAccessPoint</th>
+    <th>MovementLog</th>
     <th colspan="3">Operation</th>
   </tr>
 
@@ -14,6 +16,8 @@
     <td><%= image_tag map.image.url(:thumb) %></td>
     <td><%= link_to 'Show', map_wifi_logs_path(map) %></td>
     <td><%= link_to 'New', new_map_wifi_log_path(map) %></td>
+    <td><%= link_to 'Show', map_wifi_access_points_path(map) %></td>
+    <td><%= link_to 'Show', map_movement_logs_path(map) %></td>
     <td><%= link_to 'Show', map %></td>
     <td><%= link_to 'Edit', edit_map_path(map) %></td>
     <td><%= link_to 'Destroy', map, :confirm => 'Are you sure?', :method => :delete %></td>
@@ -23,5 +27,6 @@
 
 <br />
 
-<%= link_to 'New Map', new_map_path %><br />
-
+<div class="clear">
+<%= link_to 'New Map', new_map_path %>
+</div>

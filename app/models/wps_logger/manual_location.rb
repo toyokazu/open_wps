@@ -1,5 +1,5 @@
-class ManualLocation < ActiveRecord::Base
-  include Coordinate
+class WpsLogger::ManualLocation < WpsLogger::Base
+  set_table_name :manual_locations
 
   belongs_to :map
   has_one :movement_log

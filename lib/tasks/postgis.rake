@@ -54,6 +54,16 @@ namespace :postgis do
         end
       end
       f.close
+
+      f = File.open("#{Rails.root}/db/functions.sql")
+      begin
+        ActiveRecord::Base.connection.execute(f.read)
+      rescue => error
+        if !(error.class == ActiveRecord::StatementInvalid && (error.message =~ /PGError: ERROR:  [^\s]+\s[^\s]+\salready exists/ || error.message =~ /PGError: ERROR:  current transaction is aborted, commands ignored until end of transaction block/))
+          raise error
+        end
+      end
+
       #vacuum = sql.match(/^(VACUUM.+;\n)/).to_a[1]
       #sql = sql.gsub(vacuum, '')
       #ActiveRecord::Base.connection.execute(vacuum)

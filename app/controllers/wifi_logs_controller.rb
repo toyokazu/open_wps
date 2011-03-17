@@ -2,14 +2,18 @@ class WifiLogsController < ApplicationController
   before_filter :authenticate_user!
   # GET /maps/1/wifi_logs/
   # GET /maps/1/wifi_access_points/1/wifi_logs/
+  # GET /maps/1/movement_logs/1/wifi_logs/
   def index
     if !params[:map_id].nil?
       @map = Map.find(params[:map_id])
     else
       #FIXME
     end
+
     if !params[:wifi_access_point_id].nil?
       @wifi_access_point = WifiAccessPoint.find(params[:wifi_access_point_id])
+    elsif !params[:movement_log_id].nil?
+      @movement_log = MovementLog.find(params[:movement_log_id])
     else
       #FIXME
     end
@@ -26,22 +30,28 @@ class WifiLogsController < ApplicationController
     else
       before_param = Time.zone.parse(params[:before]).to_i * 1000
     end
-    @manual_locations = ManualLocation.where(:map_id => @map.id).where(:time => after_param..before_param)
-    @wifi_logs = []
-    @wifi_access_points = []
-    @manual_locations.each do |l|
-      if !l.movement_log.nil?
-        if @wifi_access_point.nil?
-          @wifi_logs = @wifi_logs + l.movement_log.wifi_logs
-          l.movement_log.wifi_logs.each do |wifi_log|
-            @wifi_access_points << wifi_log.wifi_access_point
+
+    if @movement_log.nil?
+      @manual_locations = ManualLocation.where(:map_id => @map.id).where(:time => after_param..before_param)
+      @wifi_logs = []
+      @wifi_access_points = []
+      @manual_locations.each do |l|
+        if !l.movement_log.nil?
+          if @wifi_access_point.nil? && @movement_log.nil?
+            @wifi_logs += l.movement_log.wifi_logs
+            l.movement_log.wifi_logs.each do |wifi_log|
+              @wifi_access_points << wifi_log.wifi_access_point
+            end
+          else
+            @wifi_logs += l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id)
           end
-        else
-          @wifi_logs = @wifi_logs + l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id)
         end
       end
+      @wifi_access_points = @wifi_access_points.uniq
+    else
+      @wifi_logs = @movement_log.wifi_logs
+      @wifi_access_points = @wifi_logs.map {|wifi_log| wifi_log.wifi_access_point if (!wifi_log.wifi_access_point.manual_location.nil? && wifi_log.wifi_access_point.manual_location.map.id == @map.id)}.compact
     end
-    @wifi_access_points = @wifi_access_points.uniq
 
     respond_to do |format|
       format.html # index.html.erb
@@ -49,13 +59,18 @@ class WifiLogsController < ApplicationController
   end
 
   # GET /wifi_access_points/1
-  # GET /maps/1//wifi_access_points/1/wifi_logs/1
+  # GET /maps/1/wifi_access_points/1/wifi_logs/1
+  # GET /maps/1/movement_logs/1/wifi_logs/1
   def show
     if !params[:map_id].nil?
       @map = Map.find(params[:map_id])
     end
     if !params[:wifi_access_point_id].nil?
       @wifi_access_point = WifiAccessPoint.find(params[:wifi_access_point_id])
+    elsif !params[:movement_log_id].nil?
+      @movement_log = MovementLog.find(params[:movement_log_id])
+    else
+      #FIXME
     end
     @wifi_log = WifiLog.find(params[:id])
 

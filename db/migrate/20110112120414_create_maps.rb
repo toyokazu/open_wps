@@ -5,7 +5,7 @@ class CreateMaps < ActiveRecord::Migration
       t.float :o_lat
       t.float :o_lon
       t.float :o_alt
-      t.geometry :geom, :z => true
+      t.point :geom, :with_z => true, :srid => Coordinate::SRID
       t.integer :o_x
       t.integer :o_y
       t.float :dist_pix_ratio
@@ -13,6 +13,7 @@ class CreateMaps < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :maps, :geom, :spatial=>true
   end
 
   def self.down

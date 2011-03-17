@@ -23,16 +23,30 @@
         <%= wifi_log.movement_log.manual_location.y %>,
         <%= wifi_log.signal %>);
     <%- end -%>
+    <%- @wifi_access_points.each do |wifi_ap| -%>
+      <%- next if wifi_ap.manual_location.nil? -%>
+      map.drawWifiAccessPoint(<%= wifi_ap.manual_location.x %>,
+        <%= wifi_ap.manual_location.y %>);
+    <%- end -%>
+    <%- if !@wifi_access_point.nil? && !@wifi_access_point.manual_location.nil? -%>
+      map.drawWifiAccessPoint(<%= @wifi_access_point.manual_location.x %>,
+        <%= @wifi_access_point.manual_location.y %>);
+    <%- end -%>
+    <%- if !@movement_log.nil? -%>
+      map.drawMovementLog(<%= @movement_log.manual_location.x %>,
+        <%= @movement_log.manual_location.y %>);
+    <%- end -%>
     });
   };
 -->
 </script>
 <canvas id="canvas" width="500" height="300"></canvas>
-<%- if !@map.nil? && !@wifi_access_point.nil? -%>
+<%- if !@map.nil? && (!@wifi_access_point.nil? || !@movement_log.nil?) -%>
+<!-- wifi_logs related to a wifi_access_point -->
 <div id="wifi_logs">
 <table>
   <tr>
-    <th>WifiAccessPoint</th>
+    <th colspan="2">WifiAccessPoint</th>
     <th colspan="2">Devise</th>
     <th colspan="4">Location</th>
     <th>Signal</th>
@@ -40,7 +54,8 @@
   </tr>
 <%- @wifi_logs.each do |wifi_log| -%>
   <tr>
-    <td><%= wifi_log.wifi_access_point.mac %></td>
+    <td><%= link_to wifi_log.wifi_access_point.mac, map_wifi_access_point_wifi_logs_path(:map_id => @map.id, :wifi_access_point_id => wifi_log.wifi_access_point.id)  %></td>
+    <td><%= wifi_log.wifi_access_point.manual_location.nil? ? '' : wifi_log.wifi_access_point.manual_location.map.name %></td>
     <td><%= wifi_log.movement_log.user.email %></td>
     <td><%= wifi_log.movement_log.user_agent %></td>
     <td><%= wifi_log.movement_log.manual_location.x %></td>
@@ -48,18 +63,33 @@
     <td><%= wifi_log.movement_log.manual_location.height %></td>
     <td><%= Time.at(wifi_log.movement_log.manual_location.time/1000) %></td>
     <td><%= wifi_log.signal %></td>
+    <%- if !@wifi_access_point.nil? -%>
     <td><%= link_to 'Show', map_wifi_access_point_wifi_log_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :id => wifi_log.id) %></td>
     <td><%= link_to 'Destroy', map_wifi_access_point_wifi_log_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :id => wifi_log.id), :confirm => 'Are you sure?', :method => :delete %></td>
+    <%- elsif !@movement_log.nil? %>
+    <td><%= link_to 'Show', map_movement_log_wifi_log_path(:map_id => @map.id, :movement_log_id => @movement_log.id, :id => wifi_log.id) %></td>
+    <td><%= link_to 'Destroy', map_movement_log_wifi_log_path(:map_id => @map.id, :movement_log_id => @movement_log.id, :id => wifi_log.id), :confirm => 'Are you sure?', :method => :delete %></td>
+    <%- else -%>
+    <!-- FIXME -->
+    <%- end -%>
   </tr>
 <%- end -%>
 </table>
 </div>
 <%- end -%>
+<!--
 <div id="wifi_access_points">
 <%- @wifi_access_points.each do |wifi_ap| -%>
   <%= link_to("#{wifi_ap.ssid} (#{wifi_ap.mac})", url_for(:controller => "wifi_logs", :action => "index", :map_id => @map.id, :wifi_access_point_id => wifi_ap.id, :before => params[:before], :after => params[:after])) %><br/>
 <%- end -%>
 </div>
-<div id="back_link">
+-->
+<div class="clear">
+<%- if @map.nil? -%>
 <%= link_to 'Back', maps_path %>
+<%- elsif !@map.nil? && !@wifi_access_point.nil? -%>
+<%= link_to 'Back', map_wifi_access_points_path(:map_id => @map.id) %>
+<%- elsif !@map.nil? && !@movement_log.nil? %>
+<%= link_to 'Back', map_movement_logs_path(:map_id => @map.id) %>
+<%- end -%>
 </div>

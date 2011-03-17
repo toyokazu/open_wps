@@ -23,7 +23,7 @@ a:hover {
 
 #page {
   background-color: #f0f0f0;
-  width: 1024px;
+  width: 1280px;
   /* width: 750px; */
   margin: 0;
   margin-left: auto;
@@ -36,7 +36,8 @@ a:hover {
   border: 3px solid #aaa;
   border-top: none;
   padding: 25px;
-  width: 800px;
+  width: 1056px;
+  /* width: 800px; */
 }
 
 #sidebar {
@@ -208,7 +209,11 @@ table#position_controller button {
 }
 
 div#message {
-  height: 18px;
+  height: 32px;
+}
+
+div#form {
+  float: right;
 }
 
 /* wifi_logs/index */
@@ -221,6 +226,12 @@ div#wifi_access_points {
   float: left;
 }
 
-div#back_link {
+/* movement_logs/index */
+div#movement_logs {
+  float: left;
+}
+
+/* layouts/application */
+div.clear {
   clear: both;
 }
