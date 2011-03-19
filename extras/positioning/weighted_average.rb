@@ -4,7 +4,24 @@ module Positioning
     include WifiParams
 
     class << self
-      def estimate(options = {})
+      def estimate_by_map(options = {})
+        movement_log = options[:movement_log]
+        x = 0
+        y = 0
+        z = 0
+        dist_sum = 0.0
+        movement_log.wifi_logs.each do |wifi_log|
+          # skip unlocated wifi_access_point
+          next if wifi_log.wifi_access_point.manual_location.nil?
+          x += wifi_log.wifi_access_point.manual_location.x / self.dist_value(wifi_log.signal)
+          y += wifi_log.wifi_access_point.manual_location.y / self.dist_value(wifi_log.signal)
+          z += (wifi_log.wifi_access_point.manual_location.height + wifi_log.wifi_access_point.manual_location.map.o_alt) / self.dist_value(wifi_log.signal)
+          dist_sum += 1 / self.dist_value(wifi_log.signal)
+        end
+        [(x / dist_sum), (y / dist_sum), (z / dist_sum) - movement_log.manual_location.map.o_alt]
+      end
+
+      def estimate_by_geom(options = {})
         movement_log = options[:movement_log]
         avg_geom = Point.from_lon_lat_z(0.0, 0.0, 0.0, Coordinate::SRID)
         dist_sum = 0.0
@@ -16,7 +33,7 @@ module Positioning
           avg_geom.z += wifi_log.wifi_access_point.manual_location.geom.z / self.dist_value(wifi_log.signal)
           dist_sum += 1 / self.dist_value(wifi_log.signal)
         end
-        avg_geom = Point.from_lon_lat_z(avg_geom.lon / dist_sum, avg_geom.lat / dist_sum, avg_geom.z / dist_sum)
+        avg_geom = Point.from_lon_lat_z(avg_geom.lon / dist_sum, avg_geom.lat / dist_sum, avg_geom.z / dist_sum, Coordinate::SRID)
       end
 
       def estimate_by_sql(options = {})

@@ -3,6 +3,7 @@ class ManualLocation < ActiveRecord::Base
 
   belongs_to :map
   has_one :movement_log
+  has_one :wifi_access_point
 
   def init_by_params(params)
     self.map_id = params["map_id"].to_i

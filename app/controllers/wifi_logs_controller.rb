@@ -38,10 +38,8 @@ class WifiLogsController < ApplicationController
       @manual_locations.each do |l|
         if !l.movement_log.nil?
           if @wifi_access_point.nil? && @movement_log.nil?
-            @wifi_logs += l.movement_log.wifi_logs
-            l.movement_log.wifi_logs.each do |wifi_log|
-              @wifi_access_points << wifi_log.wifi_access_point
-            end
+            @wifi_logs += l.movement_log.wifi_logs.where('manual_locations.map_id = ?', @map.id).order('wifi_access_points.mac').all(:include => {:wifi_access_point => :manual_location})
+            @wifi_access_points += l.movement_log.wifi_access_points.where('manual_locations.map_id = ?', @map.id).all(:include => :manual_location)
           else
             @wifi_logs += l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id)
           end
@@ -49,8 +47,8 @@ class WifiLogsController < ApplicationController
       end
       @wifi_access_points = @wifi_access_points.uniq
     else
-      @wifi_logs = @movement_log.wifi_logs
-      @wifi_access_points = @wifi_logs.map {|wifi_log| wifi_log.wifi_access_point if (!wifi_log.wifi_access_point.manual_location.nil? && wifi_log.wifi_access_point.manual_location.map.id == @map.id)}.compact
+      @wifi_logs = @movement_log.wifi_logs.order('wifi_access_points.mac').all(:include => :wifi_access_point)
+      @wifi_access_points = @movement_log.wifi_access_points.where('wifi_access_points.manual_location_id IS NOT NULL').where('manual_locations.map_id = ?', @movement_log.manual_location.map.id).all(:include => :manual_location)
     end
 
     respond_to do |format|

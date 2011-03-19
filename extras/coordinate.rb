@@ -47,7 +47,6 @@ module Coordinate
       d_3d = Math.sqrt(d_2d ** 2 + (geom2.z - geom1.z) ** 2)
     end
 
-
     # 引数 ---
     # start: 始点の Point (緯度，経度, 高さ, OpenGIS の座標系)
     # brng: 始点から終点の方位角 (北方向から時計回りの角度)
