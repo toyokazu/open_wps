@@ -62,11 +62,12 @@
     <td><%= wifi_log.movement_log.manual_location.y %></td>
     <td><%= wifi_log.movement_log.manual_location.height %></td>
     <td><%= Time.at(wifi_log.movement_log.manual_location.time/1000) %></td>
-    <td><%= wifi_log.signal %></td>
     <%- if !@wifi_access_point.nil? -%>
+    <td><%= link_to wifi_log.signal, map_wifi_access_point_wifi_logs_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :signal => wifi_log.signal) %></td>
     <td><%= link_to 'Show', map_wifi_access_point_wifi_log_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :id => wifi_log.id) %></td>
     <td><%= link_to 'Destroy', map_wifi_access_point_wifi_log_path(:map_id => @map.id, :wifi_access_point_id => @wifi_access_point.id, :id => wifi_log.id), :confirm => 'Are you sure?', :method => :delete %></td>
     <%- elsif !@movement_log.nil? %>
+    <td><%= link_to wifi_log.signal, map_movement_log_wifi_logs_path(:map_id => @map.id, :movement_log_id => @movement_log.id, :signal => wifi_log.signal) %></td>
     <td><%= link_to 'Show', map_movement_log_wifi_log_path(:map_id => @map.id, :movement_log_id => @movement_log.id, :id => wifi_log.id) %></td>
     <td><%= link_to 'Destroy', map_movement_log_wifi_log_path(:map_id => @map.id, :movement_log_id => @movement_log.id, :id => wifi_log.id), :confirm => 'Are you sure?', :method => :delete %></td>
     <%- else -%>

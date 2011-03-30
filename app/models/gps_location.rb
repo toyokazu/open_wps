@@ -1,6 +1,4 @@
 class GpsLocation < ActiveRecord::Base
-  include Coordinate
-
   has_one :movement_log
   class << self
     def new_by_json(json)

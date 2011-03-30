@@ -1,6 +1,4 @@
 class Map < ActiveRecord::Base
-  include Coordinate
-
   has_attached_file :image, :styles => { :medium => "320x320>", :thumb => "128x128>" }
   has_one :basis_map_relation, :foreign_key => 'relative_map_id', :class_name => 'MapRelation'
   has_many :relative_map_relations, :foreign_key => 'basis_map_id', :class_name => 'MapRelation'

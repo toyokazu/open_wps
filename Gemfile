@@ -32,8 +32,9 @@ gem 'devise'
 #   gem 'webrat'
 # end
 
-gem "paperclip", "~> 2.3"
-gem "json"
-gem "gsl"
-gem "spatial_adapter"
+gem 'paperclip', '~> 2.3'
+gem 'json'
+#gem 'gnuplot', :require => 'gnuplot'
+gem 'gsl'
+gem 'spatial_adapter'
 #gem "GeoRuby"

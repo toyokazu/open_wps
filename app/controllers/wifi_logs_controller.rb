@@ -17,38 +17,28 @@ class WifiLogsController < ApplicationController
     else
       #FIXME
     end
-    # after=2005-08-09T10:57:00-08:00 (RFC 3339 format)
-    # manual_location.time is recorded as integer value of the timestamp (micro second)
-    if params[:after].nil?
-      after_param = Time.new(1970,01,01).to_i * 1000
-    else
-      after_param = Time.zone.parse(params[:after]).to_i * 1000
-    end
-    # before=2005-08-09T10:57:00-08:00 (RFC 3339 format)
-    if params[:before].nil?
-      before_param = Time.new(2031,01,01).to_i * 1000
-    else
-      before_param = Time.zone.parse(params[:before]).to_i * 1000
-    end
+
+    time_condition = ManualLocation.time_condition(params)
+    signal_condition = WifiLog.signal_condition(params)
 
     if @movement_log.nil?
-      @manual_locations = ManualLocation.where(:map_id => @map.id).where(:time => after_param..before_param)
+      @manual_locations = ManualLocation.where(:map_id => @map.id).where(time_condition)
       @wifi_logs = []
       @wifi_access_points = []
       @manual_locations.each do |l|
         if !l.movement_log.nil?
           if @wifi_access_point.nil? && @movement_log.nil?
-            @wifi_logs += l.movement_log.wifi_logs.where('manual_locations.map_id = ?', @map.id).order('wifi_access_points.mac').all(:include => {:wifi_access_point => :manual_location})
-            @wifi_access_points += l.movement_log.wifi_access_points.where('manual_locations.map_id = ?', @map.id).all(:include => :manual_location)
+            @wifi_logs += l.movement_log.wifi_logs.where('manual_locations.map_id = ?', @map.id).where(signal_condition).order('wifi_access_points.mac').all(:include => {:wifi_access_point => :manual_location})
+            @wifi_access_points += l.movement_log.wifi_access_points.where('manual_locations.map_id = ?', @map.id).where(signal_condition).all(:include => :manual_location)
           else
-            @wifi_logs += l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id)
+            @wifi_logs += l.movement_log.wifi_logs.where(:wifi_access_point_id => @wifi_access_point.id).where(signal_condition)
           end
         end
       end
       @wifi_access_points = @wifi_access_points.uniq
     else
-      @wifi_logs = @movement_log.wifi_logs.order('wifi_access_points.mac').all(:include => :wifi_access_point)
-      @wifi_access_points = @movement_log.wifi_access_points.where('wifi_access_points.manual_location_id IS NOT NULL').where('manual_locations.map_id = ?', @movement_log.manual_location.map.id).all(:include => :manual_location)
+      @wifi_logs = @movement_log.wifi_logs.where(signal_condition).order('wifi_access_points.mac').all(:include => :wifi_access_point)
+      @wifi_access_points = @movement_log.wifi_access_points.where('wifi_access_points.manual_location_id IS NOT NULL').where('manual_locations.map_id = ?', @movement_log.manual_location.map.id).where(signal_condition).all(:include => :manual_location)
     end
 
     respond_to do |format|

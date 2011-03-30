@@ -1,5 +1,5 @@
 module Positioning
-  module WifiParams
+  module WifiProperty
     MAX_RSSI = -50
     MIN_RSSI = -95
     RSSI_RANGE = (MAX_RSSI - MIN_RSSI).abs
