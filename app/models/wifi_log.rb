@@ -10,10 +10,10 @@ class WifiLog < ActiveRecord::Base
     def signal_condition(options = {})
       # parameter format
       # signal=-79
-      if params[:signal].nil?
+      if options[:signal].nil?
         condition = {}
       else
-        condition = ['wifi_logs.signal = ?', params[:signal].to_i]
+        condition = ['wifi_logs.signal = ?', options[:signal].to_i]
       end
       condition
     end

@@ -216,6 +216,11 @@ div#form {
   float: right;
 }
 
+div#form_links {
+  clear: right;
+  float: right;
+}
+
 /* wifi_logs/index */
 /* wifi_access_points/index */
 div#wifi_logs {

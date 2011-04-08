@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110310000001) do
+ActiveRecord::Schema.define(:version => 20110330000001) do
 
   create_table "gps_locations", :force => true do |t|
     t.string   "gpsd_class"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
   end
 
   add_index "manual_locations", ["geom"], :name => "index_manual_locations_on_geom", :spatial => true
+  add_index "manual_locations", ["map_id"], :name => "index_manual_locations_on_map_id"
 
   create_table "map_relations", :force => true do |t|
     t.integer  "basis_map_id"
@@ -60,6 +61,9 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "map_relations", ["basis_map_id"], :name => "index_map_relations_on_basis_map_id"
+  add_index "map_relations", ["relative_map_id"], :name => "index_map_relations_on_relative_map_id"
 
   create_table "maps", :force => true do |t|
     t.string   "name"
@@ -93,6 +97,10 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.datetime "updated_at"
   end
 
+  add_index "movement_logs", ["gps_location_id"], :name => "index_movement_logs_on_gps_location_id"
+  add_index "movement_logs", ["manual_location_id"], :name => "index_movement_logs_on_manual_location_id"
+  add_index "movement_logs", ["user_id"], :name => "index_movement_logs_on_user_id"
+
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "", :null => false
     t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
@@ -120,6 +128,8 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.integer  "manual_location_id"
   end
 
+  add_index "wifi_access_points", ["manual_location_id"], :name => "index_wifi_access_points_on_manual_location_id"
+
   create_table "wifi_logs", :force => true do |t|
     t.integer  "wifi_access_point_id"
     t.integer  "movement_log_id"
@@ -127,5 +137,8 @@ ActiveRecord::Schema.define(:version => 20110310000001) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "wifi_logs", ["movement_log_id"], :name => "index_wifi_logs_on_movement_log_id"
+  add_index "wifi_logs", ["wifi_access_point_id"], :name => "index_wifi_logs_on_wifi_access_point_id"
 
 end

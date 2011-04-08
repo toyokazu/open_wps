@@ -4,6 +4,8 @@ module Positioning
     MIN_RSSI = -95
     RSSI_RANGE = (MAX_RSSI - MIN_RSSI).abs
     ### constants defined in rekimoto-san's paper
+    C0 = 0.6469894761514456
+    C1 = -0.006121707332415853
     A = (95 * Math::log10(140) - 90 * Math::log10(220)) / (Math.log10(220) - Math::log10(140))
     B = 5 / (Math::log10(220) - Math::log10(140))
     A_MAX = (95 * Math::log10(240) - 90 * Math::log10(320)) / (Math::log10(320) - Math::log10(240))
@@ -26,7 +28,8 @@ module Positioning
       end
 
       def dist_value(rssi)
-        10 ** ((A - rssi) / B)
+        10 ** (C0 + C1 * rssi)
+        # 10 ** ((A - rssi) / B)
       end
 
       def dist_max

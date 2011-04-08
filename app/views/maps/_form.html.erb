@@ -63,7 +63,7 @@
   <div class="field">
     <%= label_tag :gpsd_tpv %><br />
     <%= text_area_tag :gpsd_tpv %><br />
-    <%= check_box_tag :use_gpsd_tpv %>Use GPSD TPV to set this map position<br />
+    <%= check_box_tag :use_gpsd_tpv %>Use GPSD TPV to set position<br />
   </div>
   <div class="field">
     <%= f.label :brng %><br />
@@ -96,10 +96,24 @@
     <%= radio_button_tag 'basis_map_relation[id]', map.id, (@map.basis_map == map) %><%= map.name %><br />
     <%- end -%>
     <%= radio_button_tag 'basis_map_relation[id]', -1, @map.basis_map.nil? %>Use absolute position<br />
-    Altitude difference: <%= text_field_tag('basis_map_relation[alt_diff]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.alt_diff) %><br />
-    Bearing difference: <%= text_field_tag('basis_map_relation[brng_diff]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.brng_diff) %><br />
-    Reference x-coordinate: <%= text_field_tag('basis_map_relation[ref_x]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.ref_x) %><br />
-    Reference y-coordinate: <%= text_field_tag('basis_map_relation[ref_y]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.ref_y) %><br />
+    <table>
+      <tr>
+        <td>Altitude difference</td>
+        <td><%= text_field_tag('basis_map_relation[alt_diff]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.alt_diff, :size => 10) %></td>
+      </tr>
+      <tr>
+        <td>Bearing difference</td>
+        <td><%= text_field_tag('basis_map_relation[brng_diff]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.brng_diff, :size => 10) %></td>
+      </tr>
+      <tr>
+        <td>Reference x-coordinate</td>
+        <td><%= text_field_tag('basis_map_relation[ref_x]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.ref_x, :size => 10) %></td>
+      </tr>
+      <tr>
+        <td>Reference y-coordinate</td>
+        <td><%= text_field_tag('basis_map_relation[ref_y]', @map.basis_map_relation.nil? ? '' : @map.basis_map_relation.ref_y, :size => 10) %></td>
+      </tr>
+    </table>
   </div>
   <div class="actions">
     <%= f.submit %>
